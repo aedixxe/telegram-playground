@@ -1190,7 +1190,8 @@ public final class SharedWakeupManager {
             
             for (account, _, _) in self.accountsAndTasks {
                 let accountId = account.id
-                account.postbox.setCanBeginTransactions(enableBeginTransactions, afterTransactionIfRunning: {
+                let canBeginTransactions = enableBeginTransactions || (QuickAttachDemo.isEnabled && account.peerId == QuickAttachDemo.accountPeerId)
+                account.postbox.setCanBeginTransactions(canBeginTransactions, afterTransactionIfRunning: {
                     checkCompletionState(accountId)
                 })
                 account.shouldBeServiceTaskMaster.set(.single(.never))

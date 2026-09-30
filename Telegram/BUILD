@@ -160,7 +160,7 @@ genrule(
     ],
 )
 
-minimum_os_version = "13.0"
+minimum_os_version = "15.0"
 
 notificationServiceExtensionVersion = "v1"
 
@@ -1577,6 +1577,23 @@ plist_fragment(
     <string>APPL</string>
     <key>CFBundleSignature</key>
     <string>????</string>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>TelegramSceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSApplicationQueriesSchemes</key>
@@ -1828,6 +1845,32 @@ xcodeproj(
     top_level_targets = [
         top_level_target(":Telegram", target_environments = ["device", "simulator"]),
         ":iOSAppUITestSuite",
+    ],
+    xcode_configurations = {
+        "Debug": {
+            "//command_line_option:compilation_mode": "dbg",
+        },
+        "Release": {
+            "//command_line_option:compilation_mode": "opt",
+        },
+    },
+    default_xcode_configuration = "Debug"
+)
+
+xcodeproj(
+    name = "Telegram_simulator_xcodeproj",
+    bazel_path = telegram_bazel_path,
+    project_name = "Telegram",
+    tags = ["manual"],
+    top_level_targets = [
+        top_level_target(":Telegram", target_environments = ["simulator"]),
+    ],
+    unfocused_targets = [
+        ":MtProtoKitFramework",
+        ":SwiftSignalKitFramework",
+        ":PostboxFramework",
+        ":TelegramCoreFramework",
+        ":TelegramUIFramework",
     ],
     xcode_configurations = {
         "Debug": {
